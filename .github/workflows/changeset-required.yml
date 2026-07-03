@@ -1,0 +1,73 @@
+name: Require Changeset
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify-changeset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify changeset is present for code-impacting package changes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch origin "${{ github.base_ref }}" --depth=1
+
+          CHANGED_FILES="$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")"
+
+          PACKAGE_CHANGED=false
+          IMPACTING_PACKAGE_CHANGED=false
+          while IFS= read -r file; do
+            if [[ "$file" == packages/federal-reserve-holidays/* ]]; then
+              PACKAGE_CHANGED=true
+
+              # Allow docs-only and test-only changes without a changeset.
+              if [[ "$file" == "packages/federal-reserve-holidays/README.md" ]] || \
+                 [[ "$file" == packages/federal-reserve-holidays/docs/* ]] || \
+                 [[ "$file" == packages/federal-reserve-holidays/test/* ]] || \
+                 [[ "$file" == packages/federal-reserve-holidays/**/*.test.ts ]] || \
+                 [[ "$file" == packages/federal-reserve-holidays/**/*.spec.ts ]]; then
+                continue
+              fi
+
+              IMPACTING_PACKAGE_CHANGED=true
+              break
+            fi
+          done <<< "$CHANGED_FILES"
+
+          if [[ "$PACKAGE_CHANGED" == "false" ]]; then
+            echo "No package changes detected."
+            exit 0
+          fi
+
+          if [[ "$IMPACTING_PACKAGE_CHANGED" == "false" ]]; then
+            echo "Only docs/test package changes detected. Changeset not required."
+            exit 0
+          fi
+
+          CHANGESET_ADDED=false
+          while IFS= read -r file; do
+            if [[ "$file" == .changeset/*.md ]]; then
+              CHANGESET_ADDED=true
+              break
+            fi
+          done <<< "$CHANGED_FILES"
+
+          if [[ "$CHANGESET_ADDED" == "false" ]]; then
+            echo "Code-impacting package changes detected but no .changeset/*.md file was added in this PR."
+            echo "Run: npm run changeset"
+            exit 1
+          fi
+
+          echo "Changeset file found."

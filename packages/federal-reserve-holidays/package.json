@@ -1,0 +1,43 @@
+{
+  "name": "@bank/federal-reserve-holidays",
+  "version": "0.1.0",
+  "description": "Federal Reserve holiday utilities with observed-date handling for U.S. banking calendars.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint && npm run test && npm run build",
+    "release": "npm publish --access public --provenance",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "federal-reserve",
+    "banking",
+    "holidays",
+    "calendar"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}

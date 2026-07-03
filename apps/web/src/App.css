@@ -1,0 +1,109 @@
+#root {
+  width: 100%;
+}
+
+.shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.hero,
+.panel {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #c5d8eb;
+  border-radius: 16px;
+  padding: 1.1rem;
+  box-shadow: 0 10px 30px rgba(18, 45, 90, 0.09);
+}
+
+.eyebrow {
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #315f8d;
+  font-size: 0.8rem;
+}
+
+h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.subtitle {
+  color: #334b69;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 600;
+}
+
+.status.open {
+  background: #ecf7ef;
+  color: #1e5f31;
+}
+
+.status.holiday {
+  background: #fff2f0;
+  color: #8d2721;
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0.7rem;
+}
+
+.holidayList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.holidayItem {
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid #d8e4f1;
+  background: #f8fcff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.holidayName {
+  margin: 0;
+  font-weight: 600;
+}
+
+.holidayDate,
+.observed {
+  margin: 0.25rem 0 0;
+  color: #415979;
+}
+
+.sameDay {
+  color: #6a7f99;
+}
+
+@media (max-width: 700px) {
+  .holidayItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
